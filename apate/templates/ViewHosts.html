@@ -1,0 +1,73 @@
+{% extends "template.html" %}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h4 class="title">Devices Used by The System</h4>
+            <p class="category">This is a list of all devices configures and used in the system.</p>
+        </div>
+        <div class="content table-responsive table-full-width">
+            <table class="table table-hover table-striped">
+                <thead>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Username</th>
+                  <th>Interface</th>
+                  <th>Credential State</th>
+                  <th>Remove</th>
+                </thead>
+                <tbody>
+                  {% for dev in devices %}
+                  <tr>
+                    <td>{{dev.id}}</td>
+                    <td>{{dev.name}}</td>
+                    <td>{{dev.host}}:{{dev.ssh_port}}</td>
+                    <td>{{dev.username}}</td>
+                    <td>{{dev.interface}}</td>
+                    {% if dev.creds_valid %}
+                    <td>Valid</td>
+                    {% else %}
+                    <td>Invalid</td>
+                    {% endif %}
+                    <td>
+
+                      <table border="0px">
+                        <tr>
+                          <td>
+                            <form method="post" action="/RemoveMachine">
+                              {%csrf_token%}
+                              <input type='hidden' name='key_id' id='key_id' value={{dev.id}}>
+                              <button type="submit" class="pe-7s-trash" title="Delete machine from list."></button>
+                            </form>
+                          </td>
+                          <td>
+                            <form method="post" action="/ResetHoneypots">
+                              {%csrf_token%}
+                              <input type='hidden' name='key_id' id='key_id' value={{dev.id}}>
+                              <button type="submit" class="pe-7s-close-circle" title="Reset all honeypots on the machine"></button>
+                            </form>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+
+                          </td>
+                          <td>
+
+                          </td>
+                        </tr>
+                      </table>
+
+
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+{{ info_message }}
+{% endblock %}

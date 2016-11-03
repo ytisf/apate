@@ -1,0 +1,11 @@
+{% extends "template.html" %}
+
+{% block content %}
+<h1>Honeypot {{hp.id}} - {{hp.ip}} Configuration</h1>
+
+<pre>
+{{ conf_string }}
+</pre>
+
+{{ info_message }}
+{% endblock %}

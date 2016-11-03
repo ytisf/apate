@@ -1,0 +1,55 @@
+{% extends "template.html" %}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h4 class="title">View All Honeypot Logs</h4>
+            <p align="right">
+              <a href="/RefreshLogs"><button type="submit" class="pe-7s-refresh-2"></button></a>
+              <a href="/ClearLogs"><button type="submit" class="pe-7s-trash"></button></a>
+            </p>
+
+            <p class="category">This is a list of all events documented by Apate across honeypots.</p>
+        </div>
+        <div class="content table-responsive table-full-width">
+            <table class="table table-hover table-striped">
+                <thead>
+                  <th>ID</th>
+                  <th>IP</th>
+                  <th>TimeStamp</th>
+                  <th>Protocol:Code</th>
+                  <th>Source</th>
+                  <th>Destination</th>
+                  <th>Size</th>
+                  <th>Flags</th>
+                </thead>
+                <tbody>
+                  {% for event in events %}
+                  <tr>
+                    <td>{{event.id}}</td>
+                    <td>{{event.relHoneyPot.ip}}</td>
+                    <td>{{event.time_stamp}}</td>
+                    {% if event.protocol_type is 0 or event.protocol_type is "0" %}
+                    <td>TCP:{{event.protocol_code}}</td>
+                    {% elif event.protocol_type is 1 or event.protocol_type is "1" %}
+                    <td>UDP:{{event.protocol_code}}</td>
+                    {% elif event.protocol_type is 2 %}
+                    <td>ICMP:{{event.protocol_code}}</td>
+                    {% else %}
+                    <td>TCP:{{event.protocol_code}}</td>
+                    {% endif %}
+                    <td>{{event.src_ip}}:{{event.src_port}}</td>
+                    <td>{{event.dst_ip}}:{{event.dst_port}}</td>
+                    <td>{{event.size}}</td>
+                    <td>{{event.flags}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+{{ info_message }}
+{% endblock %}

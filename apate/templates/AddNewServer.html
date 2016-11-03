@@ -1,0 +1,62 @@
+{% extends "template.html" %}
+
+{% block content %}
+<h1>Add a New Server</h1>
+
+<form action="/AddNewServer" method="post">
+{% csrf_token %}
+<div class="row">
+
+    <div class="col-md-5">
+        <div class="form-group">
+            <label>Machine Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="Name you give the machine">
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Hostname or IP</label>
+            <input type="text" id="hostname" class="form-control" name="hostname" value="1.1.1.1">
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="username" class="form-control" id="Username" name="username" placeholder="username" value="root">
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="password" value="">
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>SSH Port</label>
+            <input type="number" class="form-control" id="port" name="port" placeholder="port" value="22">
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>Network Interface</label>
+            <input type="text" class="form-control" id="interface" name="interface" placeholder="interface" value="eth0">
+        </div>
+    </div>
+</div>
+
+<button type="submit" class="btn btn-info btn-fill pull-right">Upload</button>
+<div class="clearfix"></div>
+
+<form>
+{{ info_message }}
+{% endblock %}

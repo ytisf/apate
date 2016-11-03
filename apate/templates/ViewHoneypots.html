@@ -1,0 +1,91 @@
+{% extends "template.html" %}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h4 class="title">Honeypots Configured</h4>
+            <p class="category">This is a list of all honeypots configured and used in the system.</p>
+        </div>
+        <div class="content table-responsive table-full-width">
+            <table class="table table-hover table-striped">
+                <thead>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Device</th>
+                  <th>State</th>
+                  <th>CaptureID</th>
+                  <th>Actions</th>
+                </thead>
+                <tbody>
+                  {% for hp in honeypots %}
+                  <tr>
+                    <td>{{hp.id}}</td>
+                    <td>{{hp.name}}</td>
+                    <td>{{hp.ip}}</td>
+                    <td>{{hp.relHost.name}}:{{hp.relHost.host}}</td>
+                    {% if hp.state %}
+                    <td>Active</td>
+                    {% else %}
+                    <td>Standby</td>
+                    {% endif %}
+                    <td>{{hp.honey_id}}</td>
+                    <td>
+                      <table border="0px">
+                        <tr>
+                          <td>
+                            <form method="post" action="/RemoveHoneypot">
+                              {%csrf_token%}
+                              <input type='hidden' name='key_id' id='key_id' value={{hp.id}}>
+                              <button type="submit" class="pe-7s-trash" title="Trash"></button>
+                            </form>
+                          </td>
+                          <td>
+                            {% if hp.state %}
+                              <form method="post" action="/StopHoneypot">
+                                {%csrf_token%}
+                                <input type='hidden' name='key_id' id='key_id' value={{hp.id}}>
+                                <button type="submit" class="pe-7s-power" title="Stop Honeypot"></button>
+                              </form>
+                            {% else %}
+                              <form method="post" action="/StartHoneypot">
+                                {%csrf_token%}
+                                <input type='hidden' name='key_id' id='key_id' value={{hp.id}}>
+                                <button type="submit" class="pe-7s-sun" title="Start Honeypot"></button>
+                              </form>
+                            {% endif %}
+
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <form method="post" action="/LogView">
+                              {%csrf_token%}
+                              <input type='hidden' name='key_id' id='key_id' value={{hp.id}}>
+                              <button type="submit" class="pe-7s-graph2" title='View Logs'></button>
+                            </form>
+                          </td>
+                          <td>
+                            <form method="post" action="/DownloadConfigurations">
+                              {%csrf_token%}
+                              <input type='hidden' name='key_id' id='key_id' value={{hp.id}}>
+                              <button type="submit" class="pe-7s-download" title="Download Configurations"></button>
+                            </form>
+                          </td>
+                        </tr>
+                      </table>
+
+
+
+
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+{{ info_message }}
+{% endblock %}

@@ -1,0 +1,11 @@
+Django==1.10.2
+enum34==1.1.6
+ipaddress==1.0.17
+paramiko==2.0.2
+pexpect==4.2.1
+pyOpenSSL==0.13.1
+pyparsing==2.0.1
+python-dateutil==1.5
+pytz==2013.7
+requests==2.11.1
+six==1.4.1

@@ -1,0 +1,119 @@
+{% extends "template.html" %}
+
+{% block content %}
+
+<style>
+    .multiselect {
+        width: 300px;
+    }
+    .selectBox {
+        position: relative;
+    }
+    .selectBox select {
+        width: 100%;
+        font-weight: bold;
+    }
+    .overSelect {
+        position: absolute;
+        left: 0; right: 0; top: 0; bottom: 0;
+    }
+    #checkboxes {
+        display: none;
+        border: 1px #dadada solid;
+    }
+    #checkboxes label {
+        display: block;
+    }
+    #checkboxes label:hover {
+        background-color: #1e90ff;
+    }
+</style>
+
+
+
+<h1>Add a New Honeypot</h1>
+
+<form action="/AddNewHoneypot" method="post">
+{% csrf_token %}
+<div class="row">
+
+    <div class="col-md-5">
+        <div class="form-group">
+            <label>Honeypot Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="Honeypot Name">
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Hostname or IP</label>
+            <input type="text" id="hostname" class="form-control" name="hostname" value="1.1.1.1">
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Relevant Device</label>
+            <select name="device" id="device" class="form-control">
+              {% for dev in devices %}
+              <option value="{{dev.id}}">{{dev.id}}-{{dev.name}}, {{dev.host}}</option>
+              {% endfor %}
+            </select>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+          <label>Device</label>
+          <select name="imitation" id="imitation" class="form-control">
+            {% for os in alloss %}
+            <option value="{{os}}">{{os}}</option>
+            {% endfor %}
+          </select>
+      </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Services</label>
+            <div class="multiselect">
+              <div class="selectBox" onclick="showCheckboxes()">
+                  <select class="form-control">
+                      <option>Select Services</option>
+                  </select>
+                  <div class="overSelect"></div>
+              </div>
+              <div id="checkboxes">
+                  {% for service in services %}
+                  <label for="one"><input type="checkbox" id="{{service}}" name="{{service}}"/>{{service}}</label>
+                  {% endfor %}
+              </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<button type="submit" class="btn btn-info btn-fill pull-right">Create</button>
+<div class="clearfix"></div>
+
+
+<script>
+  var expanded = false;
+  function showCheckboxes() {
+      var checkboxes = document.getElementById("checkboxes");
+      if (!expanded) {
+          checkboxes.style.display = "block";
+          expanded = true;
+      } else {
+          checkboxes.style.display = "none";
+          expanded = false;
+      }
+  }
+</script>
+
+{{ info_message }}
+{% endblock %}

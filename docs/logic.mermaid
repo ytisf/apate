@@ -1,0 +1,43 @@
+graph TB
+
+    subgraph System
+      confs_vals[Validate Configurations]
+      analyzeLogs[Analyze Logs]
+      formEvals[Form Evaluations]
+      retVals[Receive Logs]
+      startlistener[Starts TCP Listener]
+      end
+
+    subgraph User Actions
+      subgraph Configurations
+        conf_device[Configure Device]
+        conf_hps[Configure Honeypots]
+        conf_device-->conf_hps
+        end
+
+      startHP[Start Honeypot]
+      end
+
+    subgraph Host Based
+      conffile[Write Honeypot Configuration File]
+      runLogSender[Run Log Reporter]
+      end
+
+    subgraph Visualize
+      viewEvals[View Evaluations]
+      viewLogs[View Logs]
+      end
+
+    conf_hps-.->confs_vals
+    confs_vals-.->startHP
+    conf_hps-->startHP
+    retVals-->analyzeLogs
+    analyzeLogs-.->formEvals
+    retVals-->viewLogs
+    formEvals-->viewEvals
+    startHP-->conffile
+    startHP-->runLogSender
+    runLogSender --> retVals
+    conffile-.-runLogSender
+    startHP --> startlistener
+    startlistener --> retVals

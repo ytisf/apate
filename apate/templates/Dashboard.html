@@ -1,0 +1,46 @@
+{% extends "template.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h2 class="title">Summary</h2>
+        </div>
+        <div class="content">
+            <p>Currently there are {{ devices|length }} active devices.</p>
+            <p>Currently there are {{ honeypots|length }} active honeypots.</p>
+            <p>Currently there are {{ events|length }} events in the system log.</p>
+          </div>
+        </div>
+      </div>
+</div>
+
+
+<h2>Honeypots</h2>
+
+<div class="row">
+  {% for hp in honeypots %}
+    <div class="col-md-4">
+      <div class="card">
+          <div class="header">
+              <h4 class="title">Honeypot '{{hp.name}}' - '{{hp.ip}}'</h4>
+          </div>
+          <div class="content">
+            <p>Running personality '{{hp.personality}}'.</p>
+            <p>With the following services:</p>
+            <ul>
+            {% for serv in hp.services_set.all %}
+              <li>       {{serv.name}}</li>
+            {% endfor %}
+          </ul>
+          <p>Total packet count is {{ hp.events_set.all|length }}</p>
+          </div>
+      </div>
+    </div>
+{% endfor %}
+</div>
+
+
+{% endblock %}

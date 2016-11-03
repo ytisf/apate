@@ -1,0 +1,76 @@
+graph TB
+
+  subgraph ServerSide
+    subgraph manage.py
+      main[manage.py]
+      end
+
+    subgraph views.py
+      Dashboard[Dashboard]
+      AddNewServer[AddNewServer]
+      AddNewHoneypot[AddNewHoneypot]
+      StartHoneypot[StartHoneypot]
+      ViewHosts[ViewHosts]
+      ViewHoneypots[ViewHoneypots]
+      ViewLogEvents[ViewLogEvents]
+      ViewEvents[ViewEvents]
+      end
+
+    subgraph core
+      subgraph honeyd_wrapper.py
+        HoneyDWrapper(HoneyDWrapper)
+        _WriteConfigurationFile[_WriteConfigurationFile]
+        _CreateAndUploadRetriever[_CreateAndUploadRetriever]
+        _StartHoneyd[_StartHoneyd]
+        end
+      end
+
+      subgraph ssh_wrapper.py
+        SSHInstance(SSHInstance)
+        end
+
+      subgraph retrival_agent.py
+        GoldenRetriver(GoldenRetriver)
+        StartListening(StartListening)
+        end
+
+      subgraph aux.py
+        _analyzeLogFile[_analyzeLogFile]
+        _analyzeEventLog[_analyzeEventLog]
+        _build_honeyd_configuration_file[_build_honeyd_configuration_file]
+        end
+
+    end
+
+  subgraph HostSide
+    ssh_server[SSHServer]
+    startHP[StartHoneypot]
+    push_logs[push_logs.py]
+    end
+
+  main-.->Dashboard
+  Dashboard -.-> AddNewServer
+  AddNewServer-.->AddNewHoneypot
+  AddNewHoneypot-.->StartHoneypot
+  StartHoneypot-->HoneyDWrapper
+  HoneyDWrapper -.-> SSHInstance
+  HoneyDWrapper -.-> GoldenRetriver
+  HoneyDWrapper -->_StartHoneyd
+  _WriteConfigurationFile -.- SSHInstance
+  _StartHoneyd -->_CreateAndUploadRetriever
+  _StartHoneyd --> _WriteConfigurationFile
+  _CreateAndUploadRetriever -.- GoldenRetriver
+  GoldenRetriver -.-> StartListening
+  GoldenRetriver --> push_logs
+  StartListening --> _analyzeLogFile
+  _StartHoneyd -.-> startHP
+  startHP -.->push_logs
+  push_logs --> StartListening
+  _StartHoneyd -.-> _build_honeyd_configuration_file
+  SSHInstance -.- ssh_server
+  ssh_server -.- startHP
+  _analyzeLogFile --> _analyzeEventLog
+  AddNewServer --> ViewHosts
+  AddNewHoneypot --> ViewHoneypots
+  _analyzeLogFile --> ViewLogEvents
+  _analyzeEventLog -->ViewEvents
