@@ -1,7 +1,7 @@
 # Apate
 
 ## Abstract
-![Apate Logo](docs/logos/logo.jpg "Apate Logo")
+![Apate Logo](https://github.com/ytisf/apate/raw/master/docs/logos/logo.jpg "Apate Logo")
 
 **Apate** is a user-friendly, CISO-friendly configuration, management and acquisition tool for honeyd. [honeyd](http://www.honeyd.org/index.php) is a wonderful tool. As the authors wrote *"Honeyd is a small daemon that creates virtual hosts on a network. The hosts can be configured to run arbitrary services, and their personality can be adapted so that they appear to be running certain operating systems."*. honeyd is very well written with many features and capabilities to simulate honeypots across your network. The main challenge this tool raises is the complication level of deploying those honeypots along with managing and understanding the logfiles it create.
 For this purpose **Apate** as created. **Apate** does not replace honeyd or its functionality but rather to provide a usable interface for configuring, deploying and receiving the logs of the system.
@@ -80,27 +80,27 @@ sudo python manage.py runserver 0.0.0.0:80
 ### Configure SwarmQueen
 Here you can configure a new main server which will execute the virtual honeypots. You don't need much. Just SSH credentials, IP and network interface to use.
 
-![SwarmQueen Configuration](docs/screenshots/newServer.jpg "SwarmQueen Configuration")
+![SwarmQueen Configuration](https://github.com/ytisf/apate/raw/master/docs/screenshots/newServer.jpg "SwarmQueen Configuration")
 
 ### Configure WorkingBees
 Here you create a new honeypot and define the settings. `Device` is the personality of that VM. This is how it should behave on an OS level. `Services` is a drop-down menu to choose which services should be running on that machine, and the `Relevant Device` is the server which will run the honeypot.
 
-![newWorkingBee](docs/screenshots/newHoneypot.jpg "Configure a new WorkingBee")
+![newWorkingBee](https://github.com/ytisf/apate/raw/master/docs/screenshots/newHoneypot.jpg "Configure a new WorkingBee")
 
 ### Start WorkingBees
 This is where you can see a list of all honeypots in the system. You can run them, download the configurations, delete them or view their logs. Hit the sunshine to start up the honeypot.
 
-![fire](docs/screenshots/startHoneypot.jpg "Fire It 'up")
+![fire](https://github.com/ytisf/apate/raw/master/docs/screenshots/startHoneypot.jpg "Fire It 'up")
 
 ### View WorkingBees Raw Logs
 In this screen you can see any packet that came in, length, flags, ports etc. This is a parsed version of the regular `honeyd` log.
 
-![raw](docs/screenshots/listLogs.jpg "raw")
+![raw](https://github.com/ytisf/apate/raw/master/docs/screenshots/listLogs.jpg "raw")
 
 ### View Evaluations
 So this is where you see the actual analysis. If you get one ping attempt or just 2 or 3 ports accessed you will be able to see it in the raw log but not here. This is a logic that analyses the regular log and prints out what it understand from it. So ping sweeps and port scans should be visible here.
 
-![moneyshot](docs/screenshots/listEvents.jpg "moneyshot")
+![moneyshot](https://github.com/ytisf/apate/raw/master/docs/screenshots/listEvents.jpg "moneyshot")
 
 
 ## API
@@ -115,6 +115,16 @@ wget http://127.0.0.1:8000/api/logs
 wget http://127.0.0.1:8000/api/evals
 ```
 Each will return a `json` object with the list of devices, honeypots, logs and evaulations by the system.
+
+
+## Work Flow
+
+So this is how **Apate** operates on the logical level.
+![logic](https://github.com/ytisf/apate/raw/master/docs/logic.svg "Logic")
+
+And this is how it operates with the actual code and classes.
+![flowchart](https://github.com/ytisf/apate/raw/master/docs/internals.svg "internals")
+
 
 ## License
 
@@ -139,7 +149,7 @@ You should have received a copy of the GNU General Public License along with thi
 
 ### v1.0
 - [x] Finish Export settings (HP and Device)
-- [ ] Make logging a part of the DB. 
+- [ ] Make logging a part of the DB.
 - [ ] Create an Edit Settings form.
 - [ ] When loading, if active receptions are active, create listener.
 - [ ] Do an story line of how this works and what it does during various stages.
