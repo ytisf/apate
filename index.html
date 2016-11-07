@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Apate : Your Friendly Neighbourhood Honeypot Maker and Manager">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Apate</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ytisf/apate">View on GitHub</a>
+
+          <h1 id="project_title">Apate</h1>
+          <h2 id="project_tagline">Your Friendly Neighbourhood Honeypot Maker and Manager</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/ytisf/apate/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/ytisf/apate/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="apate" class="anchor" href="#apate" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Apate</h1>
+
+<h2>
+<a id="abstract" class="anchor" href="#abstract" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Abstract</h2>
+
+<p><img src="https://github.com/ytisf/apate/raw/master/docs/logos/logo.jpg" alt="Apate Logo" title="Apate Logo"></p>
+
+<p><strong>Apate</strong> is a user-friendly, CISO-friendly configuration, management and acquisition tool for honeyd. <a href="http://www.honeyd.org/index.php">honeyd</a> is a wonderful tool. As the authors wrote <em>"Honeyd is a small daemon that creates virtual hosts on a network. The hosts can be configured to run arbitrary services, and their personality can be adapted so that they appear to be running certain operating systems."</em>. honeyd is very well written with many features and capabilities to simulate honeypots across your network. The main challenge this tool raises is the complication level of deploying those honeypots along with managing and understanding the logfiles it create.
+For this purpose <strong>Apate</strong> as created. <strong>Apate</strong> does not replace honeyd or its functionality but rather to provide a usable interface for configuring, deploying and receiving the logs of the system.</p>
+
+<h2>
+<a id="installation--configuration" class="anchor" href="#installation--configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation &amp; Configuration</h2>
+
+<p>In order for <strong>Apate</strong> to work it needs to have 2 things:</p>
+
+<ol>
+<li>A server to run <strong>Apate</strong>.
+ You will use this to configure the hosts and virtual environment. It will also collect and display the incoming information from the honeypot to use.</li>
+<li>At least one honeypot host.
+ You will configure this server to run the actual honeypots and collect and report the logs back to the main server for analysis and visualization.</li>
+</ol>
+
+<h3>
+<a id="creating-honeypot-host-machine" class="anchor" href="#creating-honeypot-host-machine" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating Honeypot Host Machine</h3>
+
+<ol>
+<li>
+<p>Use a debian based image. Preferably an Ubuntu or Raspbian. We'll first need to install some packages for the compilation process as we are to assume that the package <code>honeyd</code> does not exist in the repository.</p>
+
+<div class="highlight highlight-source-shell"><pre>sudo apt-get install farpd libevent-dev libdumbnet-dev libpcap-dev libpcre3-dev libedit-dev bison flex libtool automake1.11 git zlib1g-dev openssh-server</pre></div>
+</li>
+<li>
+<p>After we have got them all installed go a head and clone the original repository for the compilation process.</p>
+
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/DataSoft/Honeyd</pre></div>
+</li>
+<li>
+<p>To start the compilation process:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c1">cd</span> Honeyd
+./autogen.sh
+./configure
+make
+sudo make install</pre></div>
+
+<p>At this stage <code>honeyd</code> should be ready for use if everything went okay. You can verify that <code>honeyd</code> finished installation by typing in <code>which honeyd</code> and see if you get the location of the honeyd installation binary.</p>
+</li>
+<li>
+<p>Add the user to sudoers and configure no password for <code>sudo</code> command. Add the user you're working on to the sudoers for no password requested. Edit <code>/etc/sudoers</code> and add the following line:</p>
+
+<p><code>username ALL=(ALL) NOPASSWD:ALL</code></p>
+</li>
+<li>
+<p>Change permissing to important directories. There are several directories used by this. Make sure that permissions on them are 777.  If you're not sure just copy-paste this:</p>
+
+<div class="highlight highlight-source-shell"><pre>sudo mkdir -p /var/logs/winnie
+sudo mkdir -p /etc/winnie
+sudo chmod 755 /var/logs/winnie
+sudo chmod 755 /etc/winnie</pre></div>
+</li>
+</ol>
+
+<h3>
+<a id="configure-the-main-server" class="anchor" href="#configure-the-main-server" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configure the Main Server</h3>
+
+<p>So on this server you're going to configure and run the main code to which <strong>Apate</strong> is relevant. Get the source using <code>git</code> and clone it to that machine.</p>
+
+<p>After that, the only thing you should do for it to work is:</p>
+
+<div class="highlight highlight-source-shell"><pre>sudo pip install -r requirements.txt</pre></div>
+
+<p>Of course you need to have <code>python</code> and <code>pip</code> installed in order to use the previous command.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>After you've installed everything you should be able to run <strong>Apate</strong> without an issue. First, you should configure/create a database. By default <strong>Apate</strong> uses <code>SQLite3</code> as the engine but you can replace that by going to the Django <code>settings.py</code> in the <code>WP</code> folder.
+Assuming you want to keep on with the default DB engine you should create an empty database with the appropriate structure by issuing the following command.</p>
+
+<div class="highlight highlight-source-shell"><pre>python manage.py migrate</pre></div>
+
+<p>After this you can start the server on the <a href="http://127.0.0.1:8000">localhost</a> by running:</p>
+
+<div class="highlight highlight-source-shell"><pre>python manage.py runserver</pre></div>
+
+<p>Or you can run it and make it accisble from any machine by:
+running:</p>
+
+<div class="highlight highlight-source-shell"><pre>sudo python manage.py runserver 0.0.0.0:80</pre></div>
+
+<h3>
+<a id="configure-swarmqueen" class="anchor" href="#configure-swarmqueen" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configure SwarmQueen</h3>
+
+<p>Here you can configure a new main server which will execute the virtual honeypots. You don't need much. Just SSH credentials, IP and network interface to use.</p>
+
+<p><img src="https://github.com/ytisf/apate/raw/master/docs/screenshots/newServer.jpg" alt="SwarmQueen Configuration" title="SwarmQueen Configuration"></p>
+
+<h3>
+<a id="configure-workingbees" class="anchor" href="#configure-workingbees" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configure WorkingBees</h3>
+
+<p>Here you create a new honeypot and define the settings. <code>Device</code> is the personality of that VM. This is how it should behave on an OS level. <code>Services</code> is a drop-down menu to choose which services should be running on that machine, and the <code>Relevant Device</code> is the server which will run the honeypot.</p>
+
+<p><img src="https://github.com/ytisf/apate/raw/master/docs/screenshots/newHoneypot.jpg" alt="newWorkingBee" title="Configure a new WorkingBee"></p>
+
+<h3>
+<a id="start-workingbees" class="anchor" href="#start-workingbees" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Start WorkingBees</h3>
+
+<p>This is where you can see a list of all honeypots in the system. You can run them, download the configurations, delete them or view their logs. Hit the sunshine to start up the honeypot.</p>
+
+<p><img src="https://github.com/ytisf/apate/raw/master/docs/screenshots/startHoneypot.jpg" alt="fire" title="Fire It 'up"></p>
+
+<h3>
+<a id="view-workingbees-raw-logs" class="anchor" href="#view-workingbees-raw-logs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>View WorkingBees Raw Logs</h3>
+
+<p>In this screen you can see any packet that came in, length, flags, ports etc. This is a parsed version of the regular <code>honeyd</code> log.</p>
+
+<p><img src="https://github.com/ytisf/apate/raw/master/docs/screenshots/listLogs.jpg" alt="raw" title="raw"></p>
+
+<h3>
+<a id="view-evaluations" class="anchor" href="#view-evaluations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>View Evaluations</h3>
+
+<p>So this is where you see the actual analysis. If you get one ping attempt or just 2 or 3 ports accessed you will be able to see it in the raw log but not here. This is a logic that analyses the regular log and prints out what it understand from it. So ping sweeps and port scans should be visible here.</p>
+
+<p><img src="https://github.com/ytisf/apate/raw/master/docs/screenshots/listEvents.jpg" alt="moneyshot" title="moneyshot"></p>
+
+<h2>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API</h2>
+
+<p>Currently, <strong>Apate</strong> is only able to send out data with the API. Later, after authentication is added, we will add support for writing data into the system.</p>
+
+<p>Examples of information you can get from the API:</p>
+
+<div class="highlight highlight-source-shell"><pre>wget http://127.0.0.1:8000/api/devices
+wget http://127.0.0.1:8000/api/honeypots
+wget http://127.0.0.1:8000/api/logs
+wget http://127.0.0.1:8000/api/evals</pre></div>
+
+<p>Each will return a <code>json</code> object with the list of devices, honeypots, logs and evaulations by the system.</p>
+
+<h2>
+<a id="work-flow" class="anchor" href="#work-flow" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Work Flow</h2>
+
+<p>So this is how <strong>Apate</strong> operates on the logical level.
+<img src="https://github.com/ytisf/apate/raw/master/docs/logic.svg" alt="logic" title="Logic"></p>
+
+<p>And this is how it operates with the actual code and classes.
+<img src="https://github.com/ytisf/apate/raw/master/docs/internals.svg" alt="flowchart" title="internals"></p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p><strong>Apate</strong> was developed by <em>Yuval tisf Nativ</em> for <a href="https://www.agoda.com">Agoda Services Co.</a> and is released under GPLv3.</p>
+
+<p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+
+<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
+
+<h2>
+<a id="change-log" class="anchor" href="#change-log" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Change log</h2>
+
+<h3>
+<a id="09-beta-release" class="anchor" href="#09-beta-release" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.9 Beta Release</h3>
+
+<ul>
+<li>[x] Convert ssh_wrapper to use Paramiko only.</li>
+<li>[x] Create a requirements file.</li>
+<li>[x] Create remote API to push and read the information from the system.</li>
+<li>[ ] Fix the 'Close' function on HoneyDWrapper.</li>
+<li>[ ] Enable ping back sleep time to user interface.</li>
+<li>[ ] Update screenshots in README.md</li>
+</ul>
+
+<h3>
+<a id="v10" class="anchor" href="#v10" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>v1.0</h3>
+
+<ul>
+<li>[x] Finish Export settings (HP and Device)</li>
+<li>[ ] Make logging a part of the DB.</li>
+<li>[ ] Create an Edit Settings form.</li>
+<li>[ ] When loading, if active receptions are active, create listener.</li>
+<li>[ ] Do an story line of how this works and what it does during various stages.</li>
+<li>[ ] Add Import settings.</li>
+<li>[ ] Fix diplay graphs at dashboard.</li>
+</ul>
+
+<h3>
+<a id="later" class="anchor" href="#later" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Later</h3>
+
+<ul>
+<li>[ ] Harvest services log as well.</li>
+<li>[ ] Modify harvesting script that if failed 5 times, change delay to 15 minutes and count 20 misses before killing itself.</li>
+<li>[ ] Add the harvester script as a service.</li>
+<li>[ ] Authentication!</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Apate maintained by <a href="https://github.com/ytisf">ytisf</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
