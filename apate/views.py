@@ -1,4 +1,6 @@
+from django.core import serializers
 from django.shortcuts import render, redirect
+
 from threading import Thread
 
 from apate.models import *
@@ -443,3 +445,23 @@ def ClearEvals(request):
         ev.delete()
     notifications.append("Evaluations cleared.")
     return redirect("/ViewEvents")
+
+def _apiGetLogs(request):
+    a = {}
+    a['api_data'] = serializers.serialize('json', Events.objects.all())
+    return render(request, 'api.html', a)
+
+def _apiGetEvals(request):
+    a = {}
+    a['api_data'] = serializers.serialize('json', Evaluation.objects.all())
+    return render(request, 'api.html', a)
+
+def _apiGetHoneypots(request):
+    a = {}
+    a['api_data'] = serializers.serialize('json', HoneyPots.objects.all())
+    return render(request, 'api.html', a)
+
+def _apiGetDevices(request):
+    a = {}
+    a['api_data'] = serializers.serialize('json', AvailableHosts.objects.all())
+    return render(request, 'api.html', a)

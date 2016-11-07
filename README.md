@@ -103,9 +103,22 @@ So this is where you see the actual analysis. If you get one ping attempt or jus
 ![moneyshot](docs/screenshots/listEvents.jpg "moneyshot")
 
 
+## API
+
+Currently, **Apate** is only able to send out data with the API. Later, after authentication is added, we will add support for writing data into the system.
+
+Examples of information you can get from the API:
+```bash
+wget http://127.0.0.1:8000/api/devices
+wget http://127.0.0.1:8000/api/honeypots
+wget http://127.0.0.1:8000/api/logs
+wget http://127.0.0.1:8000/api/evals
+```
+Each will return a `json` object with the list of devices, honeypots, logs and evaulations by the system.
+
 ## License
 
-**Apate** was developed by *Yuval tisf Nativ* for Agoda Services Co. and is released under GPLv3.
+**Apate** was developed by *Yuval tisf Nativ* for [Agoda Services Co.](https://www.agoda.com) and is released under GPLv3.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -119,18 +132,22 @@ You should have received a copy of the GNU General Public License along with thi
 ### 0.9 Beta Release
 - [x] Convert ssh_wrapper to use Paramiko only.
 - [x] Create a requirements file.
+- [x] Create remote API to push and read the information from the system.
 - [ ] Fix the 'Close' function on HoneyDWrapper.
-- [ ] Create remote API to push and read the information from the system.
 - [ ] Enable ping back sleep time to user interface.
 - [ ] Update screenshots in README.md
 
 ### v1.0
 - [x] Finish Export settings (HP and Device)
+- [ ] Make logging a part of the DB. 
 - [ ] Create an Edit Settings form.
 - [ ] When loading, if active receptions are active, create listener.
 - [ ] Do an story line of how this works and what it does during various stages.
 - [ ] Add Import settings.
+- [ ] Fix diplay graphs at dashboard.
 
 ### Later
 - [ ] Harvest services log as well.
 - [ ] Modify harvesting script that if failed 5 times, change delay to 15 minutes and count 20 misses before killing itself.
+- [ ] Add the harvester script as a service.
+- [ ] Authentication!
