@@ -331,6 +331,7 @@ class SSHInstance():
         :return: OKAY or ERR
         """
 
+        # Open SFTP connection to the server
         try:
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -340,16 +341,23 @@ class SSHInstance():
             LogMe(caller=self.__name__, m_type=ERROR, message="Could connect to '%s'." % self.host)
             return ERR
 
+        # Make sure directory is there
         try:
             sftp.mkdir(remote_directory)
         except IOError:
             pass
 
-        f = sftp.open(remote_directory + '/' + file_name, 'w')
-        f.write(content)
-        f.close()
-        ssh.close()
-        return OKAY
+        # Write File Content
+        try:
+            f = sftp.open(remote_directory + '/' + file_name, 'w')
+            f.write(content)
+            f.close()
+            ssh.close()
+            return OKAY
+        except IOError, e:
+            LogMe(caller=__name__, m_type=ERROR, message="Could not upload file '%s'. Reason: %s." % (remote_directory+'/'+file_name,e))
+            ssh.close()
+            return ERR
 
 
 if __name__ == "__main__":

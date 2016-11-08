@@ -16,14 +16,6 @@ from apate.core.aux import _get_os_list, _build_honeyd_configuration_file, _anal
 GetGlobalVars(globals())
 
 
-
-def __init():
-    """
-    This is a preparation for a function that will run once the program starts.
-    """
-    LogMe(caller=__name__, m_type=INFORMATION, message="Completed initiating %s." % APPNAME)
-    return True
-
 def Dashboard(request):
     a = {}
     a['page'] = "Dashboard"
@@ -114,6 +106,14 @@ def ViewHosts(request):
     a['title'] = "Active Hosts"
     a['devices'] = AvailableHosts.objects.all()
     return render(request, "ViewHosts.html", a)
+
+def ViewSysLog(request):
+    a = {}
+    a['page'] = "ViewSysLog"
+    a['title'] = "View System Log"
+    a['subtitle'] = "All events documented by the system log. This is mainly for debugging purposes."
+    a['syslogs'] = SysLog.objects.all()
+    return render(request, "ViewSysLog.html", a)
 
 def AddNewHoneypot(request):
     a = {}
@@ -323,6 +323,7 @@ def StartHoneypot(request):
         active_honeypots.append([hpObj.honey_id, newWrapper])
         a['info_message'] = "Honeypot Started!."
         notifications.append("Honeypot %s was started." % hpObj.name)
+        LogMe(caller=__name__, m_type=SUCCESS, message="Honeypot %s was started." % hpObj.name)
         a['notifications'] = notifications
 
         return render(request, "ViewHoneypots.html", a)

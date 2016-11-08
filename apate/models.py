@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from django.db import models
 
 
-
 class AvailableHosts(models.Model):
     name        = models.TextField(max_length=100, help_text='How do you call this server?')
     host        = models.TextField(max_length=100, help_text='IP address or hostname.')
@@ -52,9 +51,21 @@ class Events(models.Model):
 
 
 class Evaluation(models.Model):
-
     relHoneyPot     = models.ForeignKey(HoneyPots)
     time_stamp      = models.DateTimeField(help_text='Date and time of event.')
     title           = models.TextField(max_length=128, help_text='Title of event.')
     description     = models.TextField(max_length=1024, help_text='Description of event.')
     source          = models.TextField(max_length=55, help_text='Source of the event.')
+
+class SysLog(models.Model):
+    TYPES = (
+        (0, 'INFORMATION'),
+        (1, 'SUCCESS'),
+        (2, 'WARNING'),
+        (3, 'ERROR'),
+        (4, 'CRITICAL')
+    )
+    mtype          = models.IntegerField(choices=TYPES, help_text='Type of event.')
+    caller          = models.TextField(max_length=128, help_text='Instance who logged the event.')
+    message         = models.TextField(max_length=1024, help_text='Content of the event.')
+    time_stamp      = models.DateTimeField(auto_now=True, help_text='Time the event took place.')

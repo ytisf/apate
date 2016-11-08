@@ -44,10 +44,10 @@ In order for **Apate** to work it needs to have 2 things:
 
  1. Change permissing to important directories. There are several directories used by this. Make sure that permissions on them are 777.  If you're not sure just copy-paste this:
  ```bash
- sudo mkdir -p /var/logs/winnie
- sudo mkdir -p /etc/winnie
- sudo chmod 755 /var/logs/winnie
- sudo chmod 755 /etc/winnie
+ sudo mkdir -p /var/logs/apate
+ sudo mkdir -p /etc/apate
+ sudo chmod 777 /var/logs/apate
+ sudo chmod 777 /etc/apate
  ```
 
 ### Configure the Main Server
@@ -57,6 +57,8 @@ After that, the only thing you should do for it to work is:
 ```bash
 sudo pip install -r requirements.txt
 ```
+
+**IMPORTANT NOTICE** : **Apate** creates sockets to get the logs back from the machines. It is recommended to disable the firewall on that machine **OR** open up all incoming ports between 10000-20000 TCP.
 
 Of course you need to have `python` and `pip` installed in order to use the previous command.
 
@@ -125,7 +127,7 @@ And [this is](http://knsv.github.io/mermaid/live_editor/#/view/Z3JhcGggVEIKCiAgc
 
 ## License
 
-**Apate** was developed by *Yuval tisf Nativ* for [Agoda Services Co.](https://www.agoda.com) and is released under GPLv3.
+**Apate** was developed by *Yuval tisf Nativ* for [Agoda Pte LTD.](https://www.agoda.com) and is released under GPLv3.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 

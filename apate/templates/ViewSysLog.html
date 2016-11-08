@@ -1,0 +1,36 @@
+{% extends "template.html" %}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h4 class="title">{{title}}</h4>
+            <p class="category">{{subtitle}}</p>
+        </div>
+        <div class="content table-responsive table-full-width">
+            <table class="table table-hover table-striped">
+                <thead>
+                  <th>SysLog ID</th>
+                  <th>Event Type</th>
+                  <th>Class Logger</th>
+                  <th>Description</th>
+                  <th>Time Stamp</th>
+                </thead>
+                <tbody>
+                  {% for syslog in syslogs %}
+                  <tr>
+                    <td>{{syslog.id}}</td>
+                    <td>{{syslog.get_mtype_display}}</td>
+                    <td>{{syslog.caller}}</td>
+                    <td>{{syslog.message}}</td>
+                    <td>{{syslog.time_stamp}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+{{ info_message }}
+{% endblock %}

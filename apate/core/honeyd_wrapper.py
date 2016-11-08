@@ -99,9 +99,13 @@ class HoneyDWrapper():
     def _CreateAndUploadRetriever(self):
 
         # Get Script
-        f = open('apate/foragent/push_logs.py', 'r')
-        script = f.read()
-        f.close()
+        try:
+            f = open('apate/foragent/push_logs.py', 'r')
+            script = f.read()
+            f.close()
+        except IOError,e :
+            LogMe(caller=__name__, m_type=ERROR, message="Could not find local 'push_logs.py' script. Please check your copy of '%s'." % APPNAME)
+            return ERR
 
         # Get LocalIP
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -116,14 +120,20 @@ class HoneyDWrapper():
         fname = "%s_%s" % (self.conf_id, RETRIVER_NAME)
 
         # Upload it but it might exist to ignore it
-        self.ssh_instance.PutFile(content=script, remote_directory=HONEYD_LOGS_DIRECTORY, file_name=fname)
+        check = self.ssh_instance.PutFile(content=script, remote_directory=HONEYD_LOGS_DIRECTORY, file_name=fname)
+
+        if check is ERR:
+            LogMe(caller=__name__, m_type=ERROR, message="Failed to write retriver script to client %s." % self.conf_id)
+            return ERR
 
         cmnd = "python %s -t %s -p %s & disown" % (HONEYD_LOGS_DIRECTORY+"/"+fname, self.conf_id, self.conf_id)
         a,b,c = self.ssh_instance.connection.exec_command(cmnd)
+        print cmnd
         cmnd = "python %s -r %s -p %s & disown" % (HONEYD_LOGS_DIRECTORY+"/"+fname, self.conf_id, self.conf_id)
         a,b,c = self.ssh_instance.connection.exec_command(cmnd)
+        print cmnd
         LogMe(caller=__name__, m_type=SUCCESS, message="Wrote and started retriver to client %s." % self.conf_id)
-        return
+        return OKAY
 
     def _WriteConfigurationFile(self):
         conf = str(random.randint(10000,20000))

@@ -118,6 +118,17 @@
                     </a>
                 </li>
 
+								{% if page == 'ViewSysLog' %}
+									<li class="active">
+								{% else %}
+									<li class="not-active">
+								{% endif %}
+                    <a href="/ViewSysLog">
+                        <i class="pe-7s-plugin"></i>
+                        <p>System Logs</p>
+                    </a>
+                </li>
+
             </ul>
     	</div>
     </div>

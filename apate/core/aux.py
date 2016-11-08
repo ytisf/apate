@@ -214,7 +214,8 @@ def _analyzeEventLog():
                         source=ev.src_ip
                 )
                 newEval.save()
-                notifications.append("Detected a ping attempt from %s on %s." % (ev.src_ip, hp.ip))
+                notifications.append("Detected a ping sweep from '%s' on '%s'." % (ev.src_ip, hp.ip))
+                LogMe(caller=__name__, m_type=WARNING, message="Ping Sweep detected from '%s' by '%s'!" % (hp.ip, ev.src_ip))
 
             else:
                 if ev.dst_port in COMMON_PORTS:
@@ -241,5 +242,6 @@ def _analyzeEventLog():
                 )
                 newEval.save()
                 notifications.append("Detected a Port Scan attempts from %s on %s." % (host, hp.ip))
+                LogMe(caller=__name__, m_type=WARNING, message="Port scanning detected on '%s' by '%s'!" % (hp.ip, host))
 
         return True

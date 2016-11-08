@@ -11,7 +11,7 @@ import argparse
 
 SERVER_ADDR = "SERVERIP"
 SERVER_PORT = "SERVERPORT"
-REPORT_TIME = 1
+REPORT_TIME = 10
 
 
 def _build_report(content, conf_id):
@@ -21,7 +21,7 @@ def _build_report(content, conf_id):
 
 
 def _get_logfile(conf_id):
-    fpath = "/var/logs/winnie/%s.log" % conf_id
+    fpath = "/var/logs/apate/%s.log" % conf_id
 
     if os.path.isfile(fpath) is False:
         return False

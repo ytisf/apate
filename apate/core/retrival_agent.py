@@ -64,7 +64,7 @@ class GoldenRetriver():
                                 connection.close()
                                 break
                             else:
-                                LogMe(caller=__name__, m_type=SUCCESS, message="Incoming data set from honey_id:%s." % self.honey_id)
+                                LogMe(caller=__name__, m_type=SUCCESS, message="Incoming data set from honeypot ID: %s." % self.honey_id)
                                 self._parse_input(data)
                                 connection.close()
                                 break
