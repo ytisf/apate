@@ -87,10 +87,10 @@ sudo make install</pre></div>
 <li>
 <p>Change permissing to important directories. There are several directories used by this. Make sure that permissions on them are 777.  If you're not sure just copy-paste this:</p>
 
-<div class="highlight highlight-source-shell"><pre>sudo mkdir -p /var/logs/winnie
-sudo mkdir -p /etc/winnie
-sudo chmod 755 /var/logs/winnie
-sudo chmod 755 /etc/winnie</pre></div>
+<div class="highlight highlight-source-shell"><pre>sudo mkdir -p /var/logs/apate
+sudo mkdir -p /etc/apate
+sudo chmod 777 /var/logs/apate
+sudo chmod 777 /etc/apate</pre></div>
 </li>
 </ol>
 
@@ -102,6 +102,8 @@ sudo chmod 755 /etc/winnie</pre></div>
 <p>After that, the only thing you should do for it to work is:</p>
 
 <div class="highlight highlight-source-shell"><pre>sudo pip install -r requirements.txt</pre></div>
+
+<p><strong>IMPORTANT NOTICE</strong> : <strong>Apate</strong> creates sockets to get the logs back from the machines. It is recommended to disable the firewall on that machine <strong>OR</strong> open up all incoming ports between 10000-20000 TCP.</p>
 
 <p>Of course you need to have <code>python</code> and <code>pip</code> installed in order to use the previous command.</p>
 
@@ -181,7 +183,7 @@ wget http://127.0.0.1:8000/api/evals</pre></div>
 <h2>
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
 
-<p><strong>Apate</strong> was developed by <em>Yuval tisf Nativ</em> for <a href="https://www.agoda.com">Agoda Services Co.</a> and is released under GPLv3.</p>
+<p><strong>Apate</strong> was developed by <em>Yuval tisf Nativ</em> for <a href="https://www.agoda.com">Agoda Pte LTD.</a> and is released under GPLv3.</p>
 
 <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 
