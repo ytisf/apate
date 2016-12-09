@@ -56,6 +56,7 @@ So on this server you're going to configure and run the main code to which **Apa
 After that, the only thing you should do for it to work is:
 ```bash
 sudo pip install -r requirements.txt
+sudo apt-get install libffi libffi-dev openssl libssl-dev python-openssl python-dev
 ```
 
 **IMPORTANT NOTICE** : **Apate** creates sockets to get the logs back from the machines. It is recommended to disable the firewall on that machine **OR** open up all incoming ports between 10000-20000 TCP.
