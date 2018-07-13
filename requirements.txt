@@ -1,7 +1,7 @@
 Django==1.10.2
 enum34==1.1.6
 ipaddress==1.0.17
-paramiko==2.0.2
+paramiko ~> 2.0.8
 pexpect==4.2.1
 pyOpenSSL==0.13.1
 pyparsing==2.0.1
